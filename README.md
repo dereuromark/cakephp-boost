@@ -8,12 +8,25 @@ A development tool to enhance AI-assisted coding within CakePHP projects by prov
 
 - **Documentation Search**: Fast, full-text search of CakePHP documentation using SQLite FTS5
 - **Schema Introspection**: View database schema in human-readable format
+- **MCP Server**: Model Context Protocol server for AI assistants (Claude Code, Cursor, etc.)
 - **Console Commands**: Simple CLI interface for indexing and searching documentation
 - **Sample Documentation**: Pre-loaded with 20+ common CakePHP patterns and examples
 
 ## Installation
 
-### For External Projects
+### For Development (within this sandbox)
+
+The plugin is already loaded in this project. Just run:
+
+```bash
+# Index documentation (run once or when updating docs)
+bin/cake boost_index --clear
+
+# Search documentation
+bin/cake boost_search "your query here"
+```
+
+### For External Projects (when published)
 
 ```bash
 composer require dereuromark/cakephp-boost --dev
@@ -71,33 +84,6 @@ Limit results:
 bin/cake boost_search "query" --limit 5
 ```
 
-### Viewing Database Schema
-
-View all tables:
-
-```bash
-bin/cake boost_schema
-```
-
-View specific table with detailed information:
-
-```bash
-bin/cake boost_schema users
-```
-
-Output as JSON (useful for AI processing):
-
-```bash
-bin/cake boost_schema --format json
-bin/cake boost_schema users --format json
-```
-
-Use different database connection:
-
-```bash
-bin/cake boost_schema --connection test
-```
-
 ### Available Categories
 
 - `orm` - Database, models, tables, associations
@@ -113,6 +99,36 @@ bin/cake boost_schema --connection test
 - `caching` - Cache configuration and usage
 - `events` - Event system
 - `console` - CLI commands
+
+### MCP Server (AI Integration)
+
+The plugin provides an MCP (Model Context Protocol) server for AI assistants like Claude Code:
+
+```bash
+# Start the MCP server
+php bin/cake boost_mcp_server
+```
+
+**Available Tools:**
+- `search_documentation` - Search CakePHP docs with natural language
+- `get_database_schema` - Get database schema information
+
+**Configuration for Claude Code:**
+
+Create `.claude/mcp_config.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "cakephp-boost": {
+      "command": "php",
+      "args": ["bin/cake", "boost_mcp_server"]
+    }
+  }
+}
+```
+
+See [MCP_SETUP.md](MCP_SETUP.md) for detailed configuration instructions.
 
 ## How It Works
 

@@ -29,6 +29,7 @@ class Plugin extends BasePlugin {
 		$commands->add('boost_search', Command\BoostSearchCommand::class);
 		$commands->add('boost_index', Command\BoostIndexCommand::class);
 		$commands->add('boost_schema', Command\BoostSchemaCommand::class);
+		$commands->add('boost_mcp_server', Command\BoostMcpServerCommand::class);
 
 		return $commands;
 	}
