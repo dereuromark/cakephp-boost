@@ -63,6 +63,11 @@ class BoostMcpServerCommand extends Command {
 		$params = $request['params'] ?? [];
 		$id = $request['id'] ?? null;
 
+		// Notification-type request received, do not send any response
+		if (str_starts_with($method, 'notifications/')) {
+			return null;
+		}
+
 		switch ($method) {
 			case 'initialize':
 				return $this->handleInitialize($id, $params);
