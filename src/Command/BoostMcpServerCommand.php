@@ -63,6 +63,11 @@ class BoostMcpServerCommand extends Command {
 		$params = $request['params'] ?? [];
 		$id = $request['id'] ?? null;
 
+		// Notification-type request received, do not send any response
+		if (str_starts_with($method, 'notifications/')) {
+			return null;
+		}
+
 		switch ($method) {
 			case 'initialize':
 				return $this->handleInitialize($id, $params);
@@ -100,13 +105,13 @@ class BoostMcpServerCommand extends Command {
 			'jsonrpc' => '2.0',
 			'id' => $id,
 			'result' => [
-				'protocolVersion' => '1.0',
+				'protocolVersion' => $params['protocolVersion'] ?? '2025-11-25',
 				'serverInfo' => [
 					'name' => 'cakephp-boost',
 					'version' => '1.0.0',
 				],
 				'capabilities' => [
-					'tools' => true,
+					'tools' => new \stdClass(),
 				],
 			],
 		];
