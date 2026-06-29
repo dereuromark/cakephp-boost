@@ -105,13 +105,13 @@ class BoostMcpServerCommand extends Command {
 			'jsonrpc' => '2.0',
 			'id' => $id,
 			'result' => [
-				'protocolVersion' => '1.0',
+				'protocolVersion' => $params['protocolVersion'] ?? '2025-11-25',
 				'serverInfo' => [
 					'name' => 'cakephp-boost',
 					'version' => '1.0.0',
 				],
 				'capabilities' => [
-					'tools' => true,
+					'tools' => new \stdClass(),
 				],
 			],
 		];
