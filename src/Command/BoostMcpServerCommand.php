@@ -7,6 +7,7 @@ use CakeBoost\Documentation\DocumentationIndexer;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -32,12 +33,15 @@ class BoostMcpServerCommand extends Command {
 		// Read JSON-RPC messages from stdin, write responses to stdout
 		while (($line = fgets(STDIN)) !== false) {
 			$line = trim($line);
+			$this->debugLog('REQUEST:  ' . $line);
 			if (empty($line)) {
 				continue;
 			}
 
 			$request = json_decode($line, true);
 			if (json_last_error() !== JSON_ERROR_NONE) {
+				$this->debugLog('ERROR | JSON parse error: ' . json_last_error_msg());
+
 				$this->sendError(null, -32700, 'Parse error');
 
 				continue;
@@ -303,6 +307,8 @@ class BoostMcpServerCommand extends Command {
 	 * @return void
 	 */
 	protected function sendResponse(array $response): void {
+		$this->debugLog('RESPONSE: ' . json_encode($response));
+
 		echo json_encode($response) . "\n";
 		flush();
 	}
@@ -328,4 +334,18 @@ class BoostMcpServerCommand extends Command {
 		$this->sendResponse($response);
 	}
 
+	/**
+	 * Write a message to the debug log if debug mode is enabled.
+	 *
+	 * @param string $message Log message
+	 * @return void
+	 */
+	protected function debugLog(string $message): void
+	{
+		if (!Configure::read('debug')) {
+			return;
+		}
+
+		$this->log($message, 'debug', ['scope' => ['mcp']]);
+	}
 }

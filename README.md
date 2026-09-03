@@ -130,6 +130,12 @@ Create `.claude/mcp_config.json` in your project:
 
 See [MCP_SETUP.md](MCP_SETUP.md) for detailed configuration instructions.
 
+#### Logging
+
+The plugin writes MCP-related debug output to a dedicated CakePHP log scope named `mcp`, but only when CakePHP's `debug` configuration option is enabled. By default, these messages are written to `logs/mcp-debug.log`.
+
+To customize logging, configure the `mcp` log scope in your application's logging configuration.
+
 ## How It Works
 
 1. **Indexing**: The `boost_index` command parses CakePHP documentation and stores it in a SQLite database with full-text search (FTS5) enabled
