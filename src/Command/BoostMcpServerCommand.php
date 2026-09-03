@@ -32,17 +32,15 @@ class BoostMcpServerCommand extends Command {
 		// MCP communication happens over stdio
 		// Read JSON-RPC messages from stdin, write responses to stdout
 		while (($line = fgets(STDIN)) !== false) {
-			$rawLine = $line;
-			$this->debugLog('IN  ' . date('c') . ' ' . $rawLine);
-
 			$line = trim($line);
+			$this->debugLog('REQUEST:  ' . $line);
 			if (empty($line)) {
 				continue;
 			}
 
 			$request = json_decode($line, true);
 			if (json_last_error() !== JSON_ERROR_NONE) {
-				$this->debugLog('ERR ' . date('c') . ' JSON parse error: ' . json_last_error_msg() . PHP_EOL);
+				$this->debugLog('ERROR | JSON parse error: ' . json_last_error_msg());
 
 				$this->sendError(null, -32700, 'Parse error');
 
@@ -304,7 +302,7 @@ class BoostMcpServerCommand extends Command {
 	 * @return void
 	 */
 	protected function sendResponse(array $response): void {
-		$this->debugLog('OUT ' . date('c') . ' ' . json_encode($response) . PHP_EOL);
+		$this->debugLog('RESPONSE: ' . json_encode($response));
 
 		echo json_encode($response) . "\n";
 		flush();
