@@ -17,6 +17,7 @@ class Plugin extends BasePlugin {
 	 * @return void
 	 */
 	public function bootstrap(PluginApplicationInterface $app): void {
+		parent::bootstrap($app);
 	}
 
 	/**

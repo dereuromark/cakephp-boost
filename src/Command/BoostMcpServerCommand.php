@@ -24,18 +24,10 @@ class BoostMcpServerCommand extends Command {
 	protected ConsoleIo $io;
 
 	/**
-	 * Whether debug logging is enabled.
-	 *
-	 * @var bool
-	 */
-	protected bool $debug = false;
-
-	/**
 	 * @inheritDoc
 	 */
 	public function execute(Arguments $args, ConsoleIo $io): int {
 		$this->io = $io;
-		$this->debug = (bool)Configure::read('debug');
 
 		// MCP communication happens over stdio
 		// Read JSON-RPC messages from stdin, write responses to stdout
@@ -347,14 +339,10 @@ class BoostMcpServerCommand extends Command {
 	 */
 	protected function debugLog(string $message): void
 	{
-		if (!$this->debug) {
+		if (!Configure::read('debug')) {
 			return;
 		}
 
-		file_put_contents(
-			LOGS . 'mcp-debug.log',
-			$message,
-			FILE_APPEND
-		);
+		$this->log($message, 'debug', ['scope' => ['mcp']]);
 	}
 }
